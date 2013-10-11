@@ -1,0 +1,5 @@
+require 'rbstat/sampler/sampler'
+require 'rbstat/sampler/stat'
+require 'rbstat/sampler/cpu'
+require 'rbstat/sampler/nic'
+require 'rbstat/sampler/memory'

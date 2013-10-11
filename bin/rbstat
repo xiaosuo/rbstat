@@ -1,0 +1,29 @@
+#!/usr/bin/env ruby
+
+require 'rubygems'
+require 'bundler/setup'
+require 'rbstat'
+require 'webrick/server'
+require 'drb/drb'
+
+WEBrick::Daemon.start
+
+FRONT_URI = 'druby://localhost:1234'
+
+SERVER = Rbstat::Server.new do |inst|
+  inst.register_sampler(:cpu, Rbstat::Sampler::CPU.new)
+  inst.register_sampler(:memory, Rbstat::Sampler::Memory.new)
+  inst.register_sampler(:nic, Rbstat::Sampler::NIC.new)
+end
+Thread.new do
+  SERVER.start
+end
+
+class FrontServer
+  def get(keys)
+    SERVER.get(keys)
+  end
+end
+
+DRb.start_service(FRONT_URI, FrontServer.new)
+DRb.thread.join
