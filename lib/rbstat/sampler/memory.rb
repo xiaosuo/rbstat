@@ -23,7 +23,7 @@ module Rbstat
         v, unit = v.split(/\s+/)
         mul = 1
         case unit
-        when 'kB':
+        when 'kB'
           mul = 1024
         end
         v.to_i * mul
